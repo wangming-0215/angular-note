@@ -79,7 +79,7 @@ JavaScript中那些具有或可能引发副作用的表达式是被禁止的，�
 语句上下文可以引用模板自身上下文中的属性。在下面的例子中，就是把模板的$event对象，模板的输入变量(let hero)和模板的引用变量(#heroForm)传给了组件中的一个事件处理器方法。
 
 ```html
-<buttonm (click)="onSave($event)">Save</button>
+<button (click)="onSave($event)">Save</button>
 <button *ngFor="let hero of heroes" (click)="deleteHero(hero)">{{ hero.name }}</button>
 <form #heroForm (ngSubmit)="onSubmit(heroForm)">...</form> 
 ```
@@ -149,4 +149,23 @@ attribute是由HTML定义的。property是由DOM定义的。
 
 **attribute 初始化DOM property，然后他们的任务就完成了。property的值可以改变，attribute的值不能改变。**
 
+例如，当浏览器渲染`<input type="text" value="Bob">`时，它将创建响应的DOM节点，其`value` property的值被初始化为"Bob".
+
+当用户在输入框中输入`Sally`是，DOM元素的`value` property变成了`Sally`。但是这个是HTML`value` attribute保持不变。如果我们读取input元素的attribute，就会发现确实没变。
+
+HTML attribute value指定了初始值；DOM value property是当前值。
+
+`disabled` attribute是另一个古怪的例子。按钮的`disabled` property 是`false`,因为默认情况下按钮是可用的.当我们添加`disabled` attribute时,只要他出现了按钮的`disabled` property就初始化为true,于是按钮就被禁用了.
+
+添加或删除`disabled` attribute会禁用或启用这个按钮.但attribute的值无关紧要,这就是我们为什么没法通过`<button disabled="false">仍被禁用</button>`这种写法来启用按钮.
+
+设置按钮的`disabled` proper图(如,通过Angular绑定)可以禁用或者启用这个按钮,这就是property的价值.就算名字相同,HTML attribute 和 DOM property也不是同一样东西.
+
+这句话值得在强调一次:模板绑定是通过property和事件来工作的,而不是attribute.
+
+在Angular的事件中,attribute唯一的作用是用来初始化元素和指令的状态.当进行数据绑定是,只是在于元素和指令的property和事件打交道,而attribute就完全靠边站了.
+
+### 绑定目标 ###
+
+数据绑定中的目标是DOM中的某些东西.这个目标可能是(元素|组件|指令的)property, (元素|组件|指令的)事件,或(极少数情况下)attribute名.
 
